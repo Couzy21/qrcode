@@ -1,0 +1,81 @@
+{% extends "base.html" %} {% load static %}{% block content %}
+<style>
+    .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    .form-container {
+        border: 1px solid #ccc;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        width: 600px;
+    }
+    .form-container .form-group {
+        margin-bottom: 20px;
+    }
+    .loading {
+        display: none;
+        text-align: center;
+        margin-top: 20px;
+    }
+</style>
+
+<div class="container">
+    <div class="form-container">
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input
+                    type="text"
+                    class="form-control"
+                    id="name"
+                    placeholder="Enter your name"
+                    name="name"
+                />
+            </div>
+            <div class="form-group">
+                <label for="details">Details:</label>
+                <textarea
+                    class="form-control"
+                    id="details"
+                    rows="3"
+                    placeholder="Enter additional details"
+                    name="details"
+                ></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+        <div class="loading">
+            <div class="spinner-border text-primary" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    document
+        .getElementById("myForm")
+        .addEventListener("submit", function (event) {
+            event.preventDefault();
+            showLoadingAnimation();
+            // Perform form submission or AJAX request here
+            // Once the submission is complete, you can hide the loading animation
+            // For demonstration purposes, we'll simulate a delay of 2 seconds before hiding the animation
+            setTimeout(hideLoadingAnimation, 2000);
+        });
+
+    function showLoadingAnimation() {
+        document.querySelector(".loading").style.display = "block";
+    }
+
+    function hideLoadingAnimation() {
+        document.querySelector(".loading").style.display = "none";
+    }
+</script>
+
+{% endblock %}
