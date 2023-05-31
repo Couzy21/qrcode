@@ -12,7 +12,9 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
+from decouple import config
 
+# config.load_dotenv('.env')
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
@@ -24,8 +26,8 @@ MEDIA_DIR = os.path.join(BASE_DIR, 'media')
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-vg&0v6g5mz-#%63+%g_@dnv6kcnezot0=^&3(fy8qzd9xasj6!'
-
+SECRET_KEY = config(
+    'SECRET_KEY', default='django-insecure-vg&0v6g5mz-#%63+%g_@dnv6kcnezot0=^&3(fy8qzd9xasj6!')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 

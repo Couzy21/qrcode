@@ -1,6 +1,9 @@
 {% load static %}
 
 <style>
+    #header_top {
+        background-color: #4c5d88;
+    }
     img {
         height: 45px;
         width: 220px;
@@ -81,7 +84,11 @@
     }
 </style>
 
-<nav id="header_top" class="navbar navbar-expand-lg bg-body-tertiary bg-white">
+<nav
+    id="header_top"
+    class="navbar navbar-expand-lg bg-body-tertiary"
+    style="background-color: #4c5d88"
+>
     <div class="container-fluid p-3">
         <a class="navbar-brand" href=""
             ><img alt="Couzy" src="{% static 'images/couzy.jpg' %}"

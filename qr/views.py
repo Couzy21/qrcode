@@ -2,8 +2,10 @@ import json
 import os
 
 from django.core.cache import cache
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.utils.crypto import get_random_string
+from django.contrib.auth import authenticate, login
+from django.http import HttpResponse
 
 import qrcode
 import qrcodegen
@@ -47,3 +49,36 @@ def home(request):
     else:
         error_message = 'Invalid details'
     return render(request, "qr/home.html", )
+
+
+def login(request):
+    cart = json.loads(request.COOKIES.get('cart', '{}'))
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        remember_me = request.POST.get('remember-me')
+        user = authenticate(request, username=email, password=password)
+        if user is not None:
+            response = HttpResponse()
+            response.delete_cookie('register')  # delete the cart cookie
+            login(request, user)
+            response = HttpResponse()
+            # set a cookie that lasts for 30 days
+            response.set_cookie('cart', json.dumps(cart),
+                                max_age=3600 * 24 * 30)
+            if remember_me:
+                request.session.set_expiry(1209600)  # 2 weeks
+            else:
+                # session expires when user closes browser
+                request.session.set_expiry(0)
+            return redirect('qr:home')
+        else:
+            error_message = 'Invalid email or password'
+    else:
+        error_message = None
+
+    return render(request, "qr/login.html", {'error_message': error_message})
+
+
+def signup(request):
+    return render(request, "qr/signup.html")
