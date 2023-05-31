@@ -1,0 +1,94 @@
+{% extends "base.html" %}{% load static %} {% block content %}
+<style>
+    .signup-container {
+        background-color: #4c5d88;
+        border: 1px solid #dddddd;
+        border-radius: 5px;
+        padding: 20px;
+        margin-top: 50px;
+    }
+    .signup-container h1,
+    .signup-container form label {
+        color: #ffffff;
+    }
+
+    .signup-container h1 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    .signup-container form .form-control {
+        margin-bottom: 15px;
+    }
+
+    .signup-container form .form-group label {
+        font-weight: bold;
+    }
+
+    .signup-container form .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+    .signup-container form .btn-primary:hover {
+        background-color: #0069d9;
+        border-color: #0069d9;
+    }
+    .signup-container form label {
+        color: #ffffff;
+    }
+</style>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-4 col-md-6 col-sm-8 mb-2 signup-container">
+            <h1 style="font-color: #ffffff">Sign Up</h1>
+                        {% csrf_token %}
+                <div class="form-group">
+                    <label for="fullName">Full Name</label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="fullName"
+                        placeholder="Enter your full name"
+                    />
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input
+                        type="email"
+                        class="form-control"
+                        id="email"
+                        placeholder="Enter your email address"
+                    />
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input
+                        type="password"
+                        class="form-control"
+                        id="password"
+                        placeholder="Enter a password"
+                    />
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input
+                        type="password"
+                        class="form-control"
+                        id="confirmPassword"
+                        placeholder="Confirm your password"
+                    />
+                </div>
+                <div class="text-center">
+                    <button
+                        type="submit"
+                        class="btn btn-primary btn-block text-center"
+                    >
+                        Sign Up
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
