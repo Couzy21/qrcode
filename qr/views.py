@@ -6,6 +6,8 @@ from django.shortcuts import render, redirect
 from django.utils.crypto import get_random_string
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponse
+from .models import User, UserProfile
+
 
 import qrcode
 import qrcodegen
@@ -58,6 +60,7 @@ def login(request):
         password = request.POST.get('password')
         remember_me = request.POST.get('remember-me')
         user = authenticate(request, username=email, password=password)
+        print(user)
         if user is not None:
             response = HttpResponse()
             response.delete_cookie('register')  # delete the cart cookie
@@ -81,4 +84,28 @@ def login(request):
 
 
 def signup(request):
+    if request.user.is_authenticated:
+        return redirect('qr:home')
+
+    # form submission
+    f_name = request.POST.get('name')
+    e_mail = request.POST.get('email')
+    password = request.POST.get('password')
+
+    data = {"f_name": f_name,
+            "e_mail": e_mail}
+    if e_mail:
+        user = User.objects.create_user(
+            username=e_mail,
+            password=password,  # set a default password here or let the user set it later
+            email=e_mail,
+            name=f_name,
+        )
+        user.save()
+        user_profile = UserProfile.objects.create(
+            user=user,
+            email=e_mail,
+
+        )
+        user_profile.save()
     return render(request, "qr/signup.html")
