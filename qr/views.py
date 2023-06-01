@@ -32,6 +32,7 @@ def home(request):
             "name": name,
             "details": details
         })
+        print(context)
         data = json.dumps(context)
 
         qr.add_data(data)
@@ -53,14 +54,13 @@ def home(request):
     return render(request, "qr/home.html", )
 
 
-def login(request):
+def login_view(request):
     cart = json.loads(request.COOKIES.get('cart', '{}'))
     if request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
         remember_me = request.POST.get('remember-me')
         user = authenticate(request, username=email, password=password)
-        print(user)
         if user is not None:
             response = HttpResponse()
             response.delete_cookie('register')  # delete the cart cookie
@@ -78,34 +78,39 @@ def login(request):
         else:
             error_message = 'Invalid email or password'
     else:
-        error_message = None
+        error_message = 'Invalid email or password'
 
     return render(request, "qr/login.html", {'error_message': error_message})
 
 
 def signup(request):
-    if request.user.is_authenticated:
-        return redirect('qr:home')
+    if request.method == 'POST':
 
-    # form submission
-    f_name = request.POST.get('name')
-    e_mail = request.POST.get('email')
-    password = request.POST.get('password')
+        # form submission
+        f_name = request.POST.get('name')
+        e_mail = request.POST.get('email')
+        password = request.POST.get('password')
+        data = {"f_name": f_name,
+                "e_mail": e_mail}
+        print(f_name)
+        print(password)
+        if e_mail:
+            user = User.objects.create_user(
+                username=e_mail,
+                password=password,  # set a default password here or let the user set it later
+                email=e_mail,
+            )
+            user.save()
+            print(user)
+            user_profile = UserProfile.objects.create(
+                user=user,
+                email=e_mail,
 
-    data = {"f_name": f_name,
-            "e_mail": e_mail}
-    if e_mail:
-        user = User.objects.create_user(
-            username=e_mail,
-            password=password,  # set a default password here or let the user set it later
-            email=e_mail,
-            name=f_name,
-        )
-        user.save()
-        user_profile = UserProfile.objects.create(
-            user=user,
-            email=e_mail,
+            )
+            user_profile.save()
+            if request.user.is_authenticated:
+                return redirect('qr:home')
 
-        )
-        user_profile.save()
+        return redirect('home')
+
     return render(request, "qr/signup.html")
